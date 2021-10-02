@@ -1,0 +1,458 @@
+     <meta charset="utf-8" emacsmode="-*- markdown -*-"><style class="fallback">body{visibility:hidden}</style><link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/dark.css?">
+
+                        **Joe's Arcade Party!**
+                        *Team 67: Abraham Corea Diaz, Sam Maldonado, Jade Sund, Kevin Awoufack, Fabian Velasquez*
+                        
+Overview
+===============================================================================
+Similar to previous arcade-style games, Joe's Arcade Party is a fun, interactive platform in which users can compete amongst one another in a variety of minigames. With single and party modes offered, and seven games to choose from, users can customize their gaming experience as they please. The project incorporates both ESP32 gameplay and a website interface.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Tvlok08HD74" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+Game functionality
+===============================================================================
+
+Pairing ESP
+-------------------------------------------------------------------------------
+Since our system uses both a website interface and the ESP32 for gameplay, each ESP32 needs to pair with their own website client in order for information to be communicated between the two. This is done with a username inputted on the ESP and that same username on the login page and a continual GET request until they are paired.
+
+Mode Selection
+-------------------------------------------------------------------------------
+After a player has paired their ESP with the website browser, the player is prompted to select a game mode. The player can choose “Single Player” or “Party” mode. A player should play single player if they want to play one game by themselves. Alternatively, a player should pick “Party” mode if they intend to play with multiple people or if they’d like to select a series of games to play by themselves.
+
+Creating and Joining Rooms
+-------------------------------------------------------------------------------
+After selecting “Party” mode, the web browser prompts the user to either create or join a room. One player from the party must first create a room that others will join. Only the host who creates the room will be able to select the games that will be played in that party. 
+
+Game Selection
+-------------------------------------------------------------------------------
+In “Single Player”, the player will be able to select one game to play. If the player does not play for at least 30 seconds, they will get a second chance to try again. In “Party” mode, the host can select up to five games that will be played sequentially. “Party” mode has two additional games that can be played, Trivia and Guess Joe’s Song.
+
+Games
+-------------------------------------------------------------------------------
+*Joe*
+
+Joe is a replica of the classic snake game. A player begins the game as a snake head, moving around the screen with their joystick trying to eat red apples that appear as red dots on their screen. As the player collides their snake head with the red apple, their body grows longer. As the body grows, the player is faced with a new challenge of avoiding collision with their own snake body. Each apple consumed is a singular point, and a player loses when they collide with themselves or move off-screen.
+     
+*Pong*
+
+This is a replica of the game with the same namesake. There is a ball and two paddles, one controlled by the player and the other is an AI that has a set percent chance (40 in its current state) of missing. The player paddle is controlled by the joystick to move up or down. You get three lives to make as many points as possible. You make a point if the AI misses the ball and lose a life if you miss the ball. The starting direction of the ball is also randomized.
+
+*Flappy-Joe*
+
+This game is based on Flappy bird in which the player navigates a bird between obstacles by tapping on the screen. In Flappy Joe, the player navigates a ball through obstacles that move across the screen towards it. Unlike the other games, Flappy Joe is played in a horizontal orientation with the bird’s position closer to the left. The ball is controlled through the up button, but anytime the button is not pressed the bird will fall down in a fashion that mimics gravity. The player scores points by avoiding obstacles, for every obstacle that is avoided one point is awarded. The player can lose the game by leaving the field of play or running into one of the obstacles.
+
+*Joe-It*
+
+Joe-it is our version of a Bop-It style game in which the player is prompted to complete one action from a set of known actions and the player must complete the correct action in time to get a point. Joe-It has a set of seven actions to prompt from: “Shake it!” in which the player gives the handheld system a shake, “Yell it!” in which the player must yell something loudly, “Twist it!” in which the player spins a knob, and “Joe-it LEFT/RIGHT/UP/DOWN” in which the player moves the joystick in the specified direction. Carrying out the wrong action or taking too long to choose an action will result in a game over. Each correct and timely action awards one point.  
+
+*Doodle-Joe*
+
+Based on Doodle Jump, in Doodle-Joe a player attempts to prevent a ball from falling “off” the screen. The player can only move the ball to the left or the right by tilting their game board (IMU). When the ball contacts a platform and has a velocity in the positive y direction, the ball will bounce and proceed upwards a specified number of steps before falling again. When the ball reaches a height of y = ½ *screen height, all the obstacles move downward and the players’ score increments. If the ball leaves the screen on the left it will reappear on the right. Therefore, the only way for the player to lose the game is for the ball to fall past all the platforms and escape off the bottom of the screen ( y > screen height). 
+
+*Guess-Joe*
+
+This is a trivia style game that puts users' music knowledge to the test. When the page loads, 30 seconds of music will play for the corresponding round. On each player controller a list of song names will appear. You have 45 seconds to scroll through the options and select your answer by leaving the highlighted selector on said name. Once the player has submitted their choice a “CORRECT” or “INCORRECT” will appear on their respective screen. Once all scores are in the round advances, a new song will play from the browser, and new options will appear on players’ screens. The game lasts five rounds.
+
+*Trivia*
+
+Trivia asks a group of players a series of true/false questions to test their knowledge on various general knowledge topics. This party mode game gives every party member the same 10 questions in the same order. Players have a maximum of 10 seconds to submit their answer, but faster answers are awarded more points, so if you know the answer, submit right away by tilting your joystick left for true or right for false!
+
+Leaderboards
+-------------------------------------------------------------------------------
+After games are played, their scores are posted to the leaderboard on the server. As games are played in “Party Mode”, players acquire points as they complete each game that eventually sum to determine their final rankings after all games have been played. Players acquire points in the party based on how well they performed in each individual game. For instance, if a player finished a game in first place they get 0 points, second place gets 1 point, third place gets 2 points, and so on. The player with the least points wins the party session.
+
+
+Documentation
+===============================================================================
+
+
+Parts List
+-------------------------------------------------------------------------------
+*From 6.08 Curriculum:*
+
+* 1.4” TFT LCD Screen
+* ESP32 Dev Kit
+* Breadboard
+* IMU
+* Microphone
+
+*Purchased:*
+
+* Rotary Encoder
+* Joystick
+
+
+Component to ESP Pinout
+-------------------------------------------------------------------------------
+
+*All*
+
+GND → GND
+
+*IMU*
+
+Vcc → 3.3V
+SDA → 21
+SCL → 22
+
+*Microphone*
+
+Vdd → 3.3V
+Out → VP
+
+*Rotary Encoder*
++ → 3.3V
+CLK → 34
+DT → 35
+
+*Joystick*
++5V → 3.3V (NOT 5V)
+VRX → 32
+VRY → 33
+SW → 25
+
+![](Pinout.jpg)
+
+
+System State Diagram(s)
+-------------------------------------------------------------------------------
+
+(embed final.pdf here)
+
+![](Diagram2.jpg)
+
+Design Challenges
+-------------------------------------------------------------------------------
+In the first week, we came across a design challenge in integrating all the games. We realized we needed a general game class in order to create a form of standardization across the games. The generic class had functions that all games would inherit and virtual functions that all games were required to have.
+	
+Concurrent to the games, making the website required a lot of front end development outside the scope of the course. One major challenge was because there was information that should be known between web page transitions such as player ID and room ID, but we didn’t know how to cache data so instead we sent hidden elements between pages and pulled as needed using JavaScript. Another challenge was the fact that a server cannot force a client (browser) update so synchronous elements such as knowing all the players in the lobby so that a party can advance required learning to make continuous AJAX calls can update pages without reloading.
+     
+Guess Joe’s Song (mp3 failure, keeping stuff in sync). Originally Guess Joe’s Song was meant to be entirely local gameplay with now browser requirement or synchronicity other than the players getting the same correct song for the corresponding rounds. But the mp3 module had an issue where on the setup loop an error would always stop code from continuing, but if the user hit the reset button on the ESP32 then the code would miraculously work. Ultimately we pivoted to having the music play on the browser, but this had its own problem of synchronization. We also had to make sure the players weren’t able to interact with the audio controls on the website since that would defeat the game’s purpose of having a strict time limit.
+
+
+Detailed Code Layout
+===============================================================================
+
+
+ESP Files
+-------------------------------------------------------------------------------
+*A_game_class.ino*
+
+This file contains the generic game class that all games inherit. This file has two virtual methods that all games must have: step() and getgamestate(). These are one of the only functions the main ESP uses for each specific game. The step() function is called within the loop and updates each game as it is being played. The specific implementations of each game’s step function is below. The getgamestate() function simply returns whether the game is currently being played (True) or in a gameover state (False). Additionally,.all games inherit the getscore(), setscore(), increment_score(), and post_score() functions to properly track and post the scores of the games when finished.
+
+*Guess_song.ino*
+
+The class is called Song, which is a subclass of Game and thus inherits the normal functions such as step() and getgamestate(). Its constructor is empty because no additional information is needed to start a game. There are nine global boolean. Most are to control statefulness of the game, such as sending http requests only once to not overpopulate the databases. Then there are additional global variables to store the round, song options per round, and the names of all possible songs. The step function is where the main code is executed. It first fetches the correct songs using the private function get_songs(). The latter then fills the 2D array of song options to appear on screen. Then in step the game begins and the player can scroll up and down through song names via display_text(), which displays the current selected song in pink and the others in white. Once 45 seconds have passed, the round is over and step calls post_round() to update the database with whether the player got the right answer for the corresponding round. After this step will constantly call get_round() to know it’s time to advance to the next round and go back to the state of selecting songs. Once round 5 ends, gameover is true so step will move to the terminal game over state.
+
+*Snake.ino*
+
+This file operates the snake game. It is made of two classes, the first being the Snake class. This class generates the body and movement of the snake body. It tracks the velocity, position, body length, and tail location. Specifically, the x and y positions are stored in the x_pos and y_pos arrays. The getheadindex() function determines the location of the x and y values of the snake head in the arrays. The movesnake() function calculates the new snake head position, given its velocity and direction, and appends these values to the array. The step function updates the snake body on the LCD, positioning a green circle in the location of the newly calculated head from movesnake() and positioning a black circle to erase the oldest values in the position arrays.The addbody() function increases the length of the snake body, sets a buffer so that the erasure of the snake tail is paused, shifts the current x and y values in the array to account for newly added values that will be added during the buffers durations, and increments the index of the array accordingly to properly keep track of the snake tail. Lastly, reset() is called
+
+The second class is the SnakeG class that generates a random food placement and detects collisions with the snake and the food object. The step() function here is the one that is called in the main ESP file. This function calls the previous Snake class’s step() function, checks the game state (gameover or not) and updates the game accordingly. If the game is in the gameover state, the code posts the final scores and resets the game. If the game is still being played, the function calls collisionDetect() and positions a new food on the screen if the snake has collided with the food object.
+
+*Pong.ino*
+
+There is a Pong class (which inherits the overall game class) that has a main step method for the game itself, and three sub-step methods for the player paddle, ball, and AI. There is also a reset method that is called after a point is made or a life is lost and checks for a game ending condition. The main step calls the other sub-steps as well as checks for points made or lives lost. The player step is constantly checking for user input to update the paddle position. The ball step is checking for bounce conditions and updates the ball’s position as well as having a percent chance of causing the AI to miss when it bounces off it. The AI step tracks the ball’s y-position to update its position. Once a point is made or a life is lost, the reset method is called, which checks for game ending conditions of 0 lives. Once the game is over, the score is posted and a game over screen appears. 
+
+*FlappyJoe.ino*
+
+FlappyJoe contains three new classes Flappy_Joe, Player, and Obstacles. The Obstacles class controls the graphics (i.e the obstacles) that move around the user. The obstacles are created without any inputs and randomly generate a height, distance apart, and location (top or bottom of the screen). The width is set to be a fixed value of 20 pixels. The height and distance aren’t completely random, since the class contains a maximum height and minimum height in order to prevent against unwinnable scenarios. My current implementation uses 4 instances of the Obstacle class that progress to the left (which in the correct orientation is upwards) on the LCD. Once the obstacles move past the user, they are respawned back at the bottom of the LCD with a new height, distance apart, and location.
+
+The final class I use is the Player class. Upon calling the player class an instance of player with the y location of 20,the x location of ½*screen width, a velocity of mass*accel.x, and an acceleration of 9.8. The major function within this class is player_step(int BUTTON1), which based on the input of a button moves the player up or down (moves them in the positive or negative x direction. The player’s y direction location is fixed and thus it is only allowed to move along the x direction. The only function of the player class is to move the player based on the input of the ‘up’ button.
+
+The class Flappy_Joe, which is a subclass of the game class, contains the three Game class derived functions as well as some private functions. The important private functions are collisionDetect(Obstacle obstacle) and restart(). CollisionDetect returns a bool and the others are void functions. The collisionDetect function is called every time step for each obstacle to see if the player collided with it or not. In the case of a collision, the function returns true. restart() resets the location of the player, obstacles, and other variables needed for the game to be replayed.
+
+*Joe-It.ino*
+
+This file includes the Joe_It class that inherits from the Game class and runs the Joe-It game. The game is mainly run through the game_fsm() function that gets called in the step() function. This state machine starts out in the PRE state that prints out a “press to start” screen on the LCD. This transitions to the START state that allows the user to start when ready by pressing down on the joystick. A press will transition through the GO state to the COMMAND state. This state calls the select_move() function, which chooses a random number from 0 to 6 to index the array of strings which represents the seven commands. The function copies the chosen command into a buffer that holds the current move. The COMMAND state prints the move to the screen and transitions to the WAIT state. This state calls the read_inputs() function, which reads the current state of each of the components (rotary encoder, IMU, microphone, and joystick). The IMU state is tracked by a motion_fsm() function that tracks the shake gesture. In the event that an action is detected, the WAIT state copies the name of that command into a buffer that holds the chosen move and transitions to the CHECK state. In the event that the ESP measures that 5 seconds has passed and no action has been detected, the WAIT state prints a game over screen and transitions to the LOSE state. The check state compares what is stored in the current and chosen move buffers and goes to LOSE or goes to UPDATE and increments score and fetches a new command accordingly.
+
+*Multiplayer_trivia.ino*
+
+This file includes the Trivia class that inherits from the Game class and runs the Trivia game. The game is mainly run through the game_fsm() function that gets called in the step() function. This state machine starts out in the ASK state which calls the get_question() function that makes a GET request to multiplayer_trivia_server.py to receive a question and its answer. The set of questions is randomized upon initialization of the party in game_room.py but each player in a party will receive the same questions in the same order within a particular game. The ASK state prints the question to the screen, stores the answer in a correct answer buffer, and transitions to the ANSWER state. The player then has 10 seconds to answer true by clicking the left button or false by clicking the right button. If the 10 seconds expire and no button has been pressed, this is treated as not answering in time and the player receives a score of 0 and the state transitions to NEXT. If the ESP registers a button press, it will transition to the appropriate TRUE or FALSE state and let the user know what they have chosen. Upon the end of the 10 seconds, the ESP transitions to the REVEAL state which compares the user answer to the correct answer, registers the amount of time taken to choose an answer, and assigns points accordingly. All users find out if they got the answer right or not, and what the correct answer was if they got it wrong. If a user answered correctly, the ESP takes note of how much time it took them to answer in order to award more points to those who answered the fastest. This is implemented by having a base score of 1 for a correct answer and then up to 9 additional points based on a fraction of the time they took to answer to the total time available to answer, such that answering faster is reflected in the point total. The screen also displays what their time-adjusted points are for a correctly-answered question, as well as messages to reflect particularly fast or slow correct answers. The NEXT and END states allow each ESP to repeat this process for the 10 questions and then display a final score for the player. 
+
+*Doodle_Jump.ino*
+
+This game contains three classes. One is the player class, which is modeled off the ball game built throughout the exercises. Like the ball game, this player is controlled in the x direction by the IMU, but the y direction movement is entirely a function of the game. The player rises and falls at a rate of one pixel per second. This falling speed makes the most sense in terms of detecting obstacle collisions, since a collisionDetect function call needs to be made every time step. The player obeys the rules of physics in the x direction for the most part with its motion being dictated by an applied force proportional to the amount of IMU tilt. The major functions in this class are the private moveBall() function and the public player_step(float x_force, bool bounce) function. The player_step function first updates the acceleration and velocity of the ball before calling moveBall(), which actually performs the positional movements of the ball as explained earlier. The boolean bounce sets the player defined boolean bouncing, which when true causes the ball to be moved upwards. When bouncing is false the player will move downwards. The x direction motion is dictated by the velocity of the player that player_step updates. 
+
+The second class is the obstacle class. This class is similar to the obstacle class from Flappy Joe. This class controls the downward motion of the platforms. The final class is the Doodle Jump class itself. When an instance of Doodle Jump is created, 16 obstacles in an array and 1 player are spawned. The step function, which is the only one that drastically differs from other games, is a 6 state state machine. The START state draws the obstacles for the first time and gives them an initial y position. The first 8 obstacles are given positions between y = 60 and y = 100, while the last 8 are given positions between y = 0 and y = 60. There are some controls to ensure that the platforms are created close enough together for the game to be feasible. Then the START state moves directly into the PLAYER state. In the PLAYER state, the player moves (up,down,left,right) due to the IMU until one of three things occurs: the bottom of the player hits an obstacle, the player moves above a certain y value, which is y = 79 currently, or the player’s position become y > 159. In the third case, the state goes to BOUNCE, in which the player moves up one step at a time until it reaches the predetermined bounce_amt value then the state will go back to PLAYER. In the second case, the state becomes OBSTACLE and every obstacle is shifted down (one step at a time) until a fixed number of downward moves occurs then the state goes back to PLAYER. Currently, the player’s score increases by one every time the state moves into OBSTACLE.  In the third case, the state becomes LOSE and the gameover and postscore functions are called and state becomes RESTART. The final state, RESTART waits for a button press from any of the 4 buttons before moving to START state and restarting the game play. 
+
+![](Diagram3.jpg)
+
+*Http_functions.ino*
+
+Given POST and GET functions.
+
+*zmain_ESP.ino (ESP State Diagram from previous section)*
+
+This is the main ESP file that integrates all the games and is run in the final video. To begin, the ESP user must manually input a username. This is done through a username class and a button class. The button class allows the ESP to recognize short and long presses and return a value based on those inputs. The username classe uses the button class to know when to start scrolling through characters (long press to start), when to lock in the desired letter (short press), and lock in the constructed username (long press). The IMU is used to scroll through characters by tilting left or right and this class is stateful, recognizing when to read the IMU and when the username is set.
+
+The pair_ESP() function checks to see if the user has inputted a username. When a long press is inputted to set the username, the ESP uses attempt_pairing() to send the username to the server database and repeatedly makes POST requests to check if the user has inputted the same username on the website. Once paired, the ESP will move on to retrieve more information from the website inputs the user makes. 
+
+The get_mode() function is used to send a GET request to the server to obtain what mode the user inputs into the website (single or party). If in party mode is gotten, it will use get_roomid()  to store the room ID. If single player mode is obtained, the ESP skips this step and moves on to getting the games. The get_games() function makes a GET request, using the username, mode, and room ID (if in party) to retrieve the game names the ESP will run. The ESP will not move on until each piece of information has been grabbed from the server. After the game list is returned, the ESP will be constantly using game_start() to make a GET request for a boolean to be returned from the server if a button press has been made on the website to start the game. 
+
+Once the ‘True’ has been returned the ESP loads the current game and calls game_step(current_game) which calls the respective game’s step function and runs it on the ESP. Once this game ends in single player mode, a “back to login” button will appear and take the user back to the login page to repeat the process and play again. If the game ends in party mode, the ESP changes the current game to the next game to be played, posts the scores to the leaderboard, and constantly calls game_start() to check for a website button press to start the game. Once there are no more games, the tft displays PARTY OVER in party mode. 
+
+
+Python Files
+-------------------------------------------------------------------------------
+*Leaderboard.py*
+
+This is a request handler used solely for single player mode. The request takes either a GET or a POST request. In the case of a POST request, the leaderboard database is updated with the game, player, score, and current time. There is also an exemption handler to ensure that scores are actually integers. When a GET request occurs, the database is queried and will return all the players and their corresponding scores that have played the game specified in the request in order from largest to smallest score. The top ten players (and scores) in this list will then be inserted into an html, which is then returned. The leaderboards are accessible at this [link](http://608dev-2.net/sandbox/sc/team67/Leaderboard/leaderboard.py?game=Doodle%20Jump). To see a different game’s leaderboard change the value of game=. 
+
+*Party_databases.py*
+
+For this request handler, a POST request simply updates the party_scores database with the room_id, player, score, game and timestamp or throws a ValueError that the score is not an integer. The GET request has two different functionalities based on the values of the request. If the request[‘values’] does not include ‘leaderboard’ then the party_scores database is queried for the all players and scores of a game for a room_id, which is then returned. If ‘leaderboard’ is in request[‘values’], then the player, score for the game and room_id ordered by score are fetched from party_scores and the player,score for the room_id ordered by timing and score are fetched from the leaderboard database. If the fetch from leaderboard database returns an empty list, then leaderboard database is updated with the player, score, room_id and timing, where the score is rank (as determined by order of party_scores fetch) -1. If the fetch is non-zero, then the current score is added to rank -1 and the database is updated with the player, new_score, room_id and timing. 
+
+*Party_leaderboard.py*
+
+This request handler only takes GET requests and fetches player, score from the leaderboard database based on the room_id and ordered by both timing (DESC) and score (ASC). Then the list returned is parsed in order to remove the newest entry from each player and place those entries (player,score) into the new_player list. Then the top three players, which ends up being the players with the lowest scores are entered into an HTML, which is returned. The players with lowest scores being the winners simplified the code.  
+
+*Song_select.py*
+
+This request handler is for controlling the flow of information between the ESP32 and the webpage for the game Guess Joe’s Song. Three databases dictate functionality. The guess_songs.db generates five integers that represent the correct songs for the five rounds. It exists so that all players and browsers have the right song for each round available even though the “wrong” options are different for each controller. The next database, songs_scores.db, holds whether a player got the right answer for the current round. Finally, song_rounds.db was what told the controllers that it was time to move on to the next round. The webpages and ESP32s post and get as needed.
+
+*Multiplayer_trivia_server.py*
+
+This file is in charge of serving requests from the ESP seeking a question and answer pair for the trivia game. The ESP makes a GET request that includes the party ID and the number (out of 10) question it is seeking. The handler accesses the questions database populated in game_room.py and grabs and returns the most recent question/answer pair that is associated with that party ID and question number.
+
+*Game_mode_selection.py*
+
+After a user selects a game mode it leads them to the html page returned by this file’s request handler. If a player chose single player they will get back a page to select which game they want to play. If they chose party mode they will instead be taken to a page where they have the options to join an existing party by room code or start their own party. This file also stores a user’s game mode selection in a database for the ESP to grab through ESP_game_mode.py.
+
+*Game_room.py*
+
+The request handler of this file has a couple different functions. The primary is to return a webpage where a room code/ID has been generated for the user to share and they can select the games to be played in the party. This also stores a user’s game selection for single player, which the ESP retrieves through ESP_games.py. Upon creation of a new party, this file also grabs 10 questions from the OpenTrivia API and stores them along with the party ID in a questions database that is used by the Trivia game to serve questions to the party.
+
+*Instructions_page.py*
+
+This request handler creates the instructions page for every page that tell players how to play. The actual pages are pretty plain with mostly just text, but it is updated in the background by its corresponding file transitions.js. There are also hidden form elements which is how the page knows what game page to advance to once the game for that round is over and everyone is ready to advance. The file also announces the start of the game by posting to a database.
+
+*Login.py*
+
+This file is the entry point for the whole system. It serves a POST request from the ESP that stores the ESP’s player ID and timestamp in a controller database as a way for the controller to show it is ready to pair with a browser. This POST request also checks an active users database to see if the ESP has been paired with a browser and returns a message accordingly. It serves a GET request from the browser that returns an HTML webpage with a form that allows the user to input the name of an ESP they would like to pair with. This form creates a different POST request to the same file that checks the database for a recent entry of an ESP with the name the browser user inputted. If the entry does not exist, it returns the form for the browser user to try again. Otherwise, it adds the player ID to the active players database for the ESP to recognize it has been paired, and returns the next HTML page in the sequence, the game mode selection page.
+
+*Rooms.py*
+
+The request handler has various function by request type. A GET request will pull the names of players by room code/ID and returns it as a list of strings. A POST request will return the html for the lobby of a party instance (or tells the player that they cannot join a nonexistent party). Before the page is returned the file also stores the games selected in party mode to a database which the ESP32s can pull from to know the party’s selected games and their order.
+
+*ESP_game_mode.py*
+
+This file is a request handler function that the ESP makes a get request to in order to get the game mode a user has selected on the website. This is done by retrieving the selection from a database within the last 30 seconds, using the username passed in as an argument. 
+
+*ESP_game_start.py*
+
+This file is a request handler that the ESP makes a get request to in order to return a boolean of whether or not the Start button or Next Game button have been pressed in the party lobby and session instructions page respectively. This is done by taking the room ID and game currently loaded on the ESP as query arguments to grab if there was an room ID entry in a game_start database associated with said game within the last ten seconds.
+
+*ESP_games.py*
+
+This file is a request handler that the ESp makes a get request to in order to get the games to be played. It uses a username and mode as arguments to fetch games out of a database and returns them as a dictionary along with an entry of the number of games. This is so the ESP can know how many games to run back to back if in party mode.
+
+*ESP_partyid.py*
+
+This is another request handler that the ESP makes a get request to in order to retrieve the room ID. This is done using the username to grab the associated ID within the last five minutes out of a database and returns the room ID if found. If not found, it returns a placeholder string the ESP uses to know a room ID has not been fetched yet.
+
+
+Javascript Files
+-------------------------------------------------------------------------------
+*PartySelect.js*
+
+This file works in conjunction with the webpage returned by game_room.py to select games for the five rounds of a party. On webpage load it generates five html selectors and each selector initially has the seven games as options plus a default state. The code also makes sure that no html selectors can have the same game as selected and that five games have been chosen.
+
+*Roomscript.js*
+
+The only function was that it constantly fetches from the server the names of all the players joined to the corresponding room code/ID. This then updates the lobby with the names of these players without having to refresh the webpage.
+
+*Transition.js*
+
+This file has two primary functions. The first is that it’s making AJAX calls to the server to know if gameplay for said round of the party is over. If it is, it displays the points earned for each player during that round as a mini leaderboard (not the final leaderboard). The second function is for the web-side implementation of Guess Joe’s song. It controls the functionality of playing music and changing game rounds.
+
+
+Miscellaneous Files
+-------------------------------------------------------------------------------
+*Music files for Guess Joe*
+
+MP3s of popular songs (don’t tell their record labels)
+
+*Style.css*
+
+Makes sure the media player of Guess Joe's Song stays hidden is hidden on load (all instructions pages are the same so shouldn’t be shown for incorrect games). Also ensures that the user cannot interact with the media player and cheat the game by skipping or pausing.
+
+
+Milestone Videos
+===============================================================================
+
+
+Week 1
+-------------------------------------------------------------------------------
+*Abraham*
+
+Show client log-in by turning on ESP32 and pairing with the browser client. Have the menu load in client with single, duo, and party options.
+
+<iframe src="https://drive.google.com/file/d/1tNPZwQ9M95Obq5B4uLxTi8JdW3jyq6-x/preview" width="640" height="480"></iframe>
+
+
+*Fabian*
+
+Show you can play pong on the ESP and it updates on display and web client (move paddle, AI tracks ball and tries to deflect, score updates, game ending conditions). Show similarities in Joe since both use the same generic game class.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/XBCf_udt4R8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+*Jade*
+
+Use Postman to spoof information (player, game, score, time) to be posted into databases and shown on the score summary page.
+
+<iframe src="https://drive.google.com/file/d/1wIp1wRkbTHhsUvsgi54owGljHVDN0_Vl/preview" width="640" height="480"></iframe>
+
+
+*Kevin*
+
+Show room creation and joinability working for duo and party. Show that single-player mode loads a different page. Show server files set up with git.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/4YSXeaWE5W4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+*Sam*
+
+Show you can play Joe (snake) on the ESP and it updates on LCD and web client (move snake around, score updates, snake gets longer when it eats, game ending conditions, posted score). Show generic game class being used across both games.
+
+<iframe src="https://drive.google.com/file/d/123bIDGQ1f33hQZVGD1xVHoZfWNjOXrfq/preview" width="640" height="480"></iframe>
+
+
+Week 2
+-------------------------------------------------------------------------------
+*Abraham*
+
+Show Joe-it playable and updates on display (commands displaying, action recognition, game over).
+
+<iframe src="https://drive.google.com/file/d/1nm--_ZFFAB1Z7FzARZp_Wp_UHea--AGD/preview" width="640" height="480"></iframe>
+
+
+*Fabian*
+
+Show that starting a single player game of pong updates the ESP to play the game. Show scores appearing on the leaderboard in the browser after a game ends on the ESP.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/FrKf5ctfQqs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+*Jade*
+
+Show Flappy-Joe playable and updates on display (moving background, game ending conditions, score updating, graphics)
+
+<iframe src="https://drive.google.com/file/d/1IkA9wo_2s6Z4CoMVjYmbPFqQWl94uHNM/preview" width="640" height="480"></iframe>
+
+
+*Kevin*
+
+Show in party mode in the browser changing rounds and showing scores after a round completes. Show the game room updating players shown.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/XphosOeFG5I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+*Sam*
+
+Show multiple games being played on single ESP
+
+<iframe src="https://drive.google.com/file/d/13Fc9cpuNAKxgR0HRA1eVvwgk3VujKuwr/preview" width="640" height="480"></iframe>
+
+
+Week 3
+-------------------------------------------------------------------------------
+*Abraham*
+
+Show trivia being played on ESP and questions displaying on screen, with the first player to answer being the winner of the point.
+
+<iframe src="https://drive.google.com/file/d/1t8Jv93uClY2nxOvxANBln7C5z9_OLvRn/preview" width="640" height="480"></iframe>
+
+
+*Fabian*
+
+Show games selected in duo and party mode run on ESP and scores posting on session leaderboard.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/016043WmhM4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+*Jade*
+
+Show game instructions display for selected game that is running on ESP. Show session summary page after ending.
+
+<iframe src="https://drive.google.com/file/d/1Fdsbw2kzqwTVpTzgsyjrB8QZS1QF3LJ7/preview" width="640" height="480"></iframe>
+
+<iframe src="https://drive.google.com/file/d/1t22FTBeoxJSU7St0UNAoFd_5ClMt4Hhx/preview" width="640" height="480"></iframe>
+
+
+*Kevin*
+
+Demonstrate song guessing game with clips being played and user guesses either being correct or incorrect.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/gzjy_wHqgs4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+*Sam*
+
+Show that multiple games can be played on the ESP based on user selections on webclient (Single player mode any game, duo or party mode with multiple games running back to back)
+
+<iframe src=”https://youtu.be/xR3nz1_zV8Y" width="640" height="480"></iframe>
+
+
+Week 4
+-------------------------------------------------------------------------------
+*Abraham*
+
+Show ESP playing Joe-It with new commands implemented. Show ESPs playing server-connected trivia with different initialized question sets on different plays.
+
+
+Joe-It with Expanded Control
+Warning: includes “Yell it!” so may want to adjust your volume.
+
+<iframe src="https://drive.google.com/file/d/1zD8SyeeWs7z0zo1rSq70XFOqE5SxVk_P/preview" width="640" height="480"></iframe>
+
+Trivia with Randomized Question
+
+<iframe src="https://drive.google.com/file/d/1hE5m0dmUQNT108bpC9wEYz9RPs-Fep7K/preview" width="640" height="480"></iframe>
+
+
+*Fabian*
+
+Show multiple ESPs connecting and running games in a party session. Have consistency with server-ESP timing (synchronous game running). Have Pong not go through the paddle and improve AI tracking.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/25wzUY5Aqk0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Tof49s4dBv4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+*Jade*
+
+Show Flappy Joe physics improved with more gravity and slightly more speed. Have Doodle jump run with moving screen as player jumps, obstacles randomized, and game-ending conditions.
+
+Doodle Jump
+
+<iframe src="https://drive.google.com/file/d/1x0aVZOx-Lr27kengnGVVBVj3xYooS8Tn/preview" width="640" height="480"></iframe>
+
+
+Flappy Bird
+
+<iframe src="https://drive.google.com/file/d/1yarl8edgIp4CeIeZ04SYLtrTfJtVvTuw/preview" width="640" height="480"></iframe>
+
+
+*Kevin*
+
+Show exclusively single and party modes available at mode selection. Have Guess Joe accurately play songs and demonstrate correct and incorrect choices selected.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/PLC1ZfFnN6w" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+*Sam*
+
+Show all games loaded from server with no issues when running (game is normal speed and working properly) Show snake working without trailing pixels
+
+Below are two videos to show all the games being played. The first video shows Fabian, Abraham, and I playing Trivia, Pong, Joe, Doodle Jump, and Joe-It. The party mode has a max of 5 games that can be selected, so I showed the last game (Flappy Joe) being played on single player in the second video (with funny commentary from Fabian debugging his Pong game).
+
+<iframe src="https://drive.google.com/file/d/15afLw1wXD1No3uEdBIui9Wfjhj2r9hhX/preview" width="640" height="480"></iframe>
+
+<iframe src="https://drive.google.com/file/d/15Ulk_Ks_ldEaM_xpyXGgSdk8sexGde9O/preview" width="640" height="480"></iframe>
+
+
+
+
+<!-- Markdeep: --><script src="https://morgan3d.github.io/markdeep/latest/markdeep.min.js?" charset="utf-8"></script>
